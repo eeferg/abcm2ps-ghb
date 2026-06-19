@@ -806,8 +806,26 @@ unk:
 	// extra parameters
 	clef_name = clef_middle = clef_stlines = clef_scale = NULL;
 	p_octave = p_cue = p_map = NULL;
-	parse_extra(p, &clef_name, &clef_middle, &clef_stlines,
+	// skip comma separator (e.g. K:HP, clef=none)
+	while (isspace((unsigned char) *p) || *p == ',')
+		p++;
+	p = parse_extra(p, &clef_name, &clef_middle, &clef_stlines,
 			&clef_scale, &p_octave, &p_cue, &p_map);
+	// HP/Hp may follow other params (e.g. K:clef=none, HP)
+	if (!instr) {
+		while (isspace((unsigned char) *p) || *p == ',')
+			p++;
+		if (*p == 'H') {
+			if (p[1] == 'P') {
+				instr = K_HP;
+				s->u.key.empty = 0;	// not clef-only; HP is a real key type
+			} else if (p[1] == 'p') {
+				instr = K_Hp;
+				sf = 2;
+				s->u.key.empty = 0;
+			}
+		}
+	}
 
 	s->u.key.sf = sf;
 //	s->u.key.mode = mode;
