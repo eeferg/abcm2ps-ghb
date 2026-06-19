@@ -785,9 +785,9 @@ static char psdgl[] =
 	"	fill}!\n"
 	/* x y umrd - upper mordent */
 	"/umrd{	4 add M\n"
-	"	2.2 2.2 RL 2.1 -2.9 RL 0.7 0.7 RL\n"
+	"	2.2 2.2 RL 2.1 -2.9 RL 0.7 0.7 RL 0.4 -0.4 RL\n"
 	"	-2.2 -2.2 RL -2.1 2.9 RL -0.7 -0.7 RL\n"
-	"	-2.2 -2.2 RL -2.1 2.9 RL -0.7 -0.7 RL\n"
+	"	-2.2 -2.2 RL -2.1 2.9 RL -0.7 -0.7 RL -0.4 0.4 RL\n"
 	"	2.2 2.2 RL 2.1 -2.9 RL 0.7 0.7 RL fill}!\n"
 	/* x y lmrd - lower mordent */
 	"/lmrd{	2 copy umrd M .6 SLW 0 8 RL stroke}!\n"
