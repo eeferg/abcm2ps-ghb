@@ -5,6 +5,11 @@ li p{margin-left:0}
 </style>
 # abcm2ps
 
+> This is a maintained edition of Jean-François Moine's abcm2ps, extended for
+> bagpipe sheet music. The original GitHub repository was archived in 2024;
+> Moine's work continues on his [Fossil repository](https://chiselapp.com/user/moinejf/repository/abcm2ps).
+> Full credit for the original program belongs to him.
+
 ### Overview
 
 abcm2ps is a C program which converts music tunes from the ABC music notation

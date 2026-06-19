@@ -1,12 +1,12 @@
-# abcm2ps — Ed's working fork
+# abcm2ps — Ed's bagpipe edition
 
 ## What this is
 
 **abcm2ps** converts ABC music notation (a text-based format for folk/traditional tunes) into
-PostScript or SVG sheet music files. This fork is used to typeset bagpipe sheet music.
+PostScript or SVG sheet music files. This edition is maintained for typesetting bagpipe sheet music.
 
-The upstream author is **Jean-François Moine** (http://moinejf.free.fr), who is the sole
-contributor throughout the entire git history.
+The original author is **Jean-François Moine** (http://moinejf.free.fr), who is the sole
+contributor throughout the entire git history. Full credit for the program belongs to him.
 
 ---
 
@@ -155,12 +155,12 @@ Current value in `syms.c`: `2.45 1.5 RM`. Sweet spot is likely between 2.4 and 2
 
 ---
 
-## Repository remotes
+## Repository
 
-```
-origin    git@github.com:eeferg/abcm2ps.git   (this fork — push here)
-upstream  https://github.com/lewdlime/abcm2ps.git  (archived GitHub source)
-```
+This edition is maintained at https://github.com/eeferg/abcm2ps.
 
-The live upstream is moinejf's Fossil repo:
+Moine's original work continues on his Fossil repository:
 https://chiselapp.com/user/moinejf/repository/abcm2ps
+
+The archived GitHub source this was based on:
+https://github.com/lewdlime/abcm2ps (archived 2024)
