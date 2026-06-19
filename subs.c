@@ -20,7 +20,7 @@
 #include <ctype.h>
 #ifdef HAVE_PANGO
 #include <pango/pangocairo.h>
-#include <pango/pangofc-font.h>
+#include <hb-ot.h>
 #endif
 
 #include "abcm2ps.h" 
@@ -401,9 +401,10 @@ static void pg_line_output(PangoLayoutLine *line)
 	GSList *runs_list;
 	PangoGlyphInfo *glyph_info;
 	char tmp[256];
-	const char *fontname = NULL;
-	int ret, glypharray;
+	char fontname[256];
+	int glypharray;
 
+	fontname[0] = '\0';
 	outft = -1;
 	glypharray = 0;
 	for (runs_list = line->runs; runs_list; runs_list = runs_list->next) {
@@ -412,8 +413,7 @@ static void pg_line_output(PangoLayoutLine *line)
 		PangoGlyphString *glyphs = run->glyphs;
 		PangoAnalysis *analysis = &item->analysis;
 		PangoFont *font = analysis->font;
-		PangoFcFont *fc_font = PANGO_FC_FONT(font);
-		FT_Face face = pango_fc_font_lock_face(fc_font);
+		hb_font_t *hb_font = pango_font_get_hb_font(font);
 		PangoFontDescription *ftdesc = pango_font_describe(font);
 		int wi = pango_font_description_get_size(ftdesc);
 		int i, c;
@@ -429,14 +429,18 @@ static void pg_line_output(PangoLayoutLine *line)
 				continue;
 			}
 
-			ret = FT_Load_Glyph(face,
-					c,		// PangoGlyph = index
-					FT_LOAD_NO_SCALE);
-			if (ret != 0) {
-				error(0, NULL, "freetype error %d\n", ret);
-			} else if (FT_HAS_GLYPH_NAMES(face)) {
-				if (FT_Get_Postscript_Name(face) != fontname) {
-					fontname = FT_Get_Postscript_Name(face);
+			if (!hb_font_get_glyph_name(hb_font, c,
+						tmp, sizeof tmp)) {
+				error(0, NULL, "!! no glyph %d\n", c);
+			} else {
+				char fname[256];
+				unsigned int len = sizeof fname;
+				hb_ot_name_get_utf8(hb_font_get_face(hb_font),
+						HB_OT_NAME_ID_POSTSCRIPT_NAME,
+						HB_LANGUAGE_INVALID, &len, fname);
+				if (strcmp(fname, fontname) != 0) {
+					strncpy(fontname, fname, sizeof fontname - 1);
+					fontname[sizeof fontname - 1] = '\0';
 					if (glypharray)
 						a2b("]glypharray");
 					a2b("\n/%s %.1f selectfont[",
@@ -444,15 +448,9 @@ static void pg_line_output(PangoLayoutLine *line)
 						(float) wi / PG_SCALE);
 					glypharray = 1;
 				}
-				FT_Get_Glyph_Name(face, c,
-						tmp, sizeof tmp);
 				a2b("/%s", tmp);
-			} else {
-				error(0, NULL, "!! no glyph %d in %s-%s\n",
-					c, face->family_name, face->style_name);
 			}
 		}
-		pango_fc_font_unlock_face(fc_font);
 	}
 	if (glypharray)
 		a2b("]glypharray");
@@ -589,11 +587,12 @@ static void pg_para_output(int job)
 	PangoLayoutLine *line;
 	PangoGlyphInfo *glyph_info;
 	char tmp[256];
-	const char *fontname = NULL;
-	int ret, glypharray;
+	char fontname[256];
+	int glypharray;
 	int wi;
 	float y;
 
+	fontname[0] = '\0';
 	pango_layout_set_text(layout, pg_str->str,
 			pg_str->len - 1);	/* remove the last space */
 	pango_layout_set_attributes(layout, attrs);
@@ -618,15 +617,14 @@ static void pg_para_output(int job)
 			PangoGlyphString *glyphs = run->glyphs;
 			PangoAnalysis *analysis = &item->analysis;
 			PangoFont *font = analysis->font;
-			PangoFcFont *fc_font = PANGO_FC_FONT(font);
-			FT_Face face = pango_fc_font_lock_face(fc_font);
+			hb_font_t *hb_font = pango_font_get_hb_font(font);
 			PangoFontDescription *ftdesc =
 					pango_font_describe(font);
 			int i, g, set_move, x;
 
 			if (pango_font_description_get_size(ftdesc) != wi) {
 				wi = pango_font_description_get_size(ftdesc);
-				fontname = NULL;
+				fontname[0] = '\0';
 			}
 
 			pango_layout_index_to_pos(layout, item->offset, &pos);
@@ -654,14 +652,18 @@ static void pg_para_output(int job)
 					continue;
 				}
 
-				ret = FT_Load_Glyph(face,
-						g,		// PangoGlyph = index
-						FT_LOAD_NO_SCALE);
-				if (ret != 0) {
-					fprintf(stdout, "%%%% freetype error %d\n", ret);
-				} else if (FT_HAS_GLYPH_NAMES(face)) {
-					if (FT_Get_Postscript_Name(face) != fontname) {
-						fontname = FT_Get_Postscript_Name(face);
+				if (!hb_font_get_glyph_name(hb_font, g,
+							tmp, sizeof tmp)) {
+					a2b("%% no glyph name: %d\n", g);
+				} else {
+					char fname[256];
+					unsigned int len = sizeof fname;
+					hb_ot_name_get_utf8(hb_font_get_face(hb_font),
+							HB_OT_NAME_ID_POSTSCRIPT_NAME,
+							HB_LANGUAGE_INVALID, &len, fname);
+					if (strcmp(fname, fontname) != 0) {
+						strncpy(fontname, fname, sizeof fontname - 1);
+						fontname[sizeof fontname - 1] = '\0';
 						if (glypharray)
 							a2b("]glypharray");
 						a2b("\n/%s %.1f selectfont[",
@@ -669,8 +671,6 @@ static void pg_para_output(int job)
 							(float) wi / PG_SCALE);
 						glypharray = 1;
 					}
-					FT_Get_Glyph_Name((FT_FaceRec *) face, g,
-							tmp, sizeof tmp);
 					if (job == T_JUSTIFY
 					 && strcmp(tmp, "space") == 0) {
 						set_move = 1;
@@ -681,12 +681,8 @@ static void pg_para_output(int job)
 						glypharray = 1;
 					}
 					a2b("/%s", tmp);
-				} else {
-					a2b("%% glyph: %s %d\n",
-						FT_Get_Postscript_Name(face), g);
 				}
 			}
-			pango_fc_font_unlock_face(fc_font);
 			if (glypharray) {
 				a2b("]glypharray\n");
 				glypharray = 0;
