@@ -2,8 +2,8 @@
 set -e -f -u
 
 # (automatic update)
-VERSION=8.14.15
-VDATE=2024-01-08
+VERSION=8.14.18
+VDATE=2026-01-28
 
 # Variables may be set, by order of precedence:
 # * in the environment,
@@ -30,7 +30,7 @@ done
 # also expanded by the shell and need a default value.
 : "${PKG_CONFIG=${host+$host-}pkg-config}"
 : "${prefix=/usr/local}"
-: "${srcdir=.}"
+: "${srcdir=$(realpath --relative-to=. $(dirname $0))}"
 
 case "$srcdir" in
     *\ *)
