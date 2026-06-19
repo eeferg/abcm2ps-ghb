@@ -5,9 +5,11 @@ li p{margin-left:0}
 </style>
 # abcm2ps
 
-> This is a maintained edition of Jean-François Moine's abcm2ps, extended for
-> bagpipe sheet music. The original GitHub repository was archived in 2024;
-> Moine's work continues on his [Fossil repository](https://chiselapp.com/user/moinejf/repository/abcm2ps).
+> This is a maintained edition of Jean-François Moine's abcm2ps, with fixes and
+> fine-tuning for Great Highland Bagpipe score rendering. abcm2ps has always
+> supported bagpipe music, but bugs in that area tend to go unnoticed upstream
+> as bagpipe music is understandably not Moine's primary focus. The original GitHub repository was archived
+> in 2024; Moine's work continues on his [Fossil repository](https://chiselapp.com/user/moinejf/repository/abcm2ps).
 > Full credit for the original program belongs to him.
 
 ### Overview
@@ -59,6 +61,24 @@ Run `abcm2ps -h` to know the list of the command line options.
 
 - The features and format parameters are described in
     [abcm2ps-doc](http://moinejf.free.fr/abcm2ps-doc/index.html).
+
+### This edition — Great Highland Bagpipe focus
+
+This repository began as a fork of the archived GitHub mirror of abcm2ps and has since
+been established as an independent project. The full git history from the original
+repository is preserved, and upstream changes from Moine's Fossil repository through
+v8.14.18 (January 2026) have been merged.
+
+The focus going forward is catching and correcting rendering issues specific to Great
+Highland Bagpipe scores — gracenotes, embellishments, and PostScript output details
+that are easy to miss if you are not actively producing pipe music. Changes of this
+kind are unlikely to find their way upstream, as Moine's active development has moved
+to [abc2svg](https://chiselapp.com/user/moinejf/repository/abc2svg).
+
+Some historical context: in the early 2000s, bagpipe-related PostScript suggestions
+were contributed to moinejf directly and incorporated into the original abcm2ps. This
+project continues that tradition of refining the program for pipe music, now as a
+standalone maintained edition.
 
 ### Links
 
