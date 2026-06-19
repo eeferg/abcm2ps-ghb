@@ -479,7 +479,7 @@ static char ps_head[] =
 
 	/* x y ghd - grace note head */
 	"/ghd{	xymove\n"
-	"	1.7 1.5 RM\n"
+	"	2.45 1.5 RM\n"
 	"	-1.32 2.31 -5.94 -0.33 -4.62 -2.64 RC\n"
 	"	1.32 -2.31 5.94 0.33 4.62 2.64 RC fill}!\n"
 
@@ -511,7 +511,7 @@ static char ps_head[] =
 	"0 setlinecap 0 setlinejoin\n";
 
 /* PS direct glyphs */
-static char psdgl[] = 
+static char psdgl[] =
 	"/hbrce{	-2.5 1 RM\n"
 	"	-4.5 -4.6 -7.5 -12.2 -4.4 -26.8 RC\n"
 	"	3.5 -14.3 3.2 -21.7 -2.1 -24.2 RC\n"

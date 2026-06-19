@@ -132,6 +132,27 @@ Changes in `subs.c`, functions `pg_line_output` and `pg_para_output`:
 
 Result: clean build with zero deprecation warnings on Ubuntu 24.04.
 
+### 3 — Fix bagpipe gracenote notehead alignment (syms.c)
+
+**In progress** — *fix: align grace note notehead with stem in PostScript output*
+
+The gracenote notehead (`ghd` in `syms.c`) was drawn a few pixels to the left of the stem.
+Root cause: the PS definition started the notehead ellipse at `x+1.7` but the stem (`gu`/`gd`
+and flagged variants `sgu`/`sgd`/`sgs`) is always drawn at `x + GSTEM_XOFF` = `x+2.3`
+(`GSTEM_XOFF` defined in `abcm2ps.h`). The SVG version of the same glyph (`svg.c`) correctly
+used `x+2.2`, making the discrepancy PS-only.
+
+**Tuning notes** — the offset in `ghd` (`syms.c:482`, the `RM` argument):
+
+| Value | Result |
+|-------|--------|
+| `1.7` | original — notehead visibly left of stem (~0.6 unit gap) |
+| `2.3` | flush with stem — slightly too far left visually |
+| `2.4` | slightly too left |
+| `2.45` | current — slightly too right, but closest so far |
+
+Current value in `syms.c`: `2.45 1.5 RM`. Sweet spot is likely between 2.4 and 2.45.
+
 ---
 
 ## Repository remotes
