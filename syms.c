@@ -477,11 +477,12 @@ static char ps_head[] =
 	"/pdshhd{pshhd}!\n"
 	"/pdfthd{pfthd}!\n"
 
-	/* x y ghd - grace note head */
-	"/ghd{	xymove\n"
-	"	2.45 1.5 RM\n"
+	/* x y ghd - grace note head (scale 0.80 = 80% of original size) */
+	"/ghd{	/x 2 index def/y 1 index def\n"
+	"	gsave T 0.80 dup scale\n"
+	"	3.06 1.5 M\n"
 	"	-1.32 2.31 -5.94 -0.33 -4.62 -2.64 RC\n"
-	"	1.32 -2.31 5.94 0.33 4.62 2.64 RC fill}!\n"
+	"	1.32 -2.31 5.94 0.33 4.62 2.64 RC fill grestore}!\n"
 
 	/* dx dy gua / gda - acciaccatura */
 	"/gua{x y M -1 4 RM RL stroke}!\n"
