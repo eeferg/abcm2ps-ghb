@@ -34,15 +34,85 @@ The features of abcm2ps are based on the
 The differences are listed in the
 [abcm2ps/abc2svg documentation](http://moinejf.free.fr/abcm2ps-doc/features.html).
 
-### Installation and usage
+### Building from source
 
-The installation procedure is described in the file INSTALL.
-To build the program with default settings run
+#### Quick start
 
+```sh
+./configure
+make
 ```
-    ./configure
-    make
+
+The binary is produced in the current directory as `./abcm2ps`.
+
+#### Dependencies — Ubuntu 24.04 LTS
+
+Install all required development libraries with a single command:
+
+```sh
+sudo apt install \
+    libpango1.0-dev \
+    libcairo2-dev \
+    libharfbuzz-dev \
+    libfreetype-dev \
+    libfontconfig1-dev
 ```
+
+Versions confirmed working on Ubuntu 24.04.2 LTS:
+
+| Package | Version |
+|---------|---------|
+| `libpango1.0-dev` | 1.52.1 |
+| `libcairo2-dev` | 1.18.0 |
+| `libharfbuzz-dev` | 8.3.0 |
+| `libfreetype-dev` | 2.13.2 |
+| `libfontconfig1-dev` | 2.15.0 |
+
+You also need a standard C build environment (`gcc`, `make`):
+
+```sh
+sudo apt install build-essential
+```
+
+The package names are the same across Debian/Ubuntu releases. Pango 1.44 or later is
+required (this fork replaces the deprecated FreeType API used in the original upstream code).
+
+#### Dependencies — macOS (Sequoia 15, Apple Silicon and Intel)
+
+The easiest path is [Homebrew](https://brew.sh). If it isn't installed yet:
+
+```sh
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+Then install the dependencies and build tools:
+
+```sh
+brew install gcc make pango cairo harfbuzz freetype fontconfig pkg-config
+```
+
+Build as normal:
+
+```sh
+./configure
+make
+```
+
+**Apple Silicon note:** Homebrew installs to `/opt/homebrew` on M-series Macs. The
+`configure` script finds libraries via `pkg-config`, which Homebrew sets up automatically,
+so no extra flags should be needed. If `configure` cannot find a library, ensure
+`/opt/homebrew/bin` is on your `PATH`:
+
+```sh
+export PATH="/opt/homebrew/bin:$PATH"
+```
+
+Add that line to your `~/.zshrc` (zsh is the default shell on macOS) to make it permanent.
+
+**Intel Mac note:** Homebrew installs to `/usr/local`, which is already on the default
+`PATH`, so no extra steps are needed.
+
+### Usage
 
 Basically, the program usage is:
 

@@ -40,48 +40,8 @@ git checkout main
 
 ## Building
 
-### Quick start
-
-```sh
-./configure
-make
-```
-
-The binary is produced in the current directory as `./abcm2ps`.
-
-### Dependencies — Ubuntu 24.04 LTS
-
-Install all required development libraries with a single command:
-
-```sh
-sudo apt install \
-    libpango1.0-dev \
-    libcairo2-dev \
-    libharfbuzz-dev \
-    libfreetype-dev \
-    libfontconfig1-dev
-```
-
-Versions confirmed working on Ubuntu 24.04.2 LTS:
-
-| Package | Version |
-|---------|---------|
-| `libpango1.0-dev` | 1.52.1 |
-| `libcairo2-dev` | 1.18.0 |
-| `libharfbuzz-dev` | 8.3.0 |
-| `libfreetype-dev` | 2.13.2 |
-| `libfontconfig1-dev` | 2.15.0 |
-
-You also need a standard C build environment (`gcc`, `make`):
-
-```sh
-sudo apt install build-essential
-```
-
-### Other Debian/Ubuntu releases
-
-The package names are the same across Debian/Ubuntu. Pango 1.44 or later is required
-(the deprecated FreeType API used in older upstream code is fixed in this fork — see below).
+See the README for full dependency and build instructions (Ubuntu and macOS).
+Quick start: `./configure && make` — the binary is `./abcm2ps`.
 
 ---
 
